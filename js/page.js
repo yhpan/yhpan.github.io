@@ -4,25 +4,25 @@ var ETNGpager = function( srcName, dstName, cntPP, cntPS )
 {
 this.srcName = srcName;
 this.dstName = dstName;
-this.curP   = 1;//Ä¬ÈÏµ±Ç°Ò³ÎªµÚÒ»Ò³
-this.cntPP   = cntPP || 2;//Ä¬ÈÏÃ¿Ò³Á½Ìõ¼ÍÂ¼
-this.cntPS   = cntPS || 3;//Ä¬ÈÏÃ¿Ò³ÏÔÊ¾5¸ö·ÖÒ³ÉÏÏÂÎÄ
+this.curP   = 1;//é»˜è®¤å½“å‰é¡µä¸ºç¬¬ä¸€é¡µ
+this.cntPP   = cntPP || 2;//é»˜è®¤æ¯é¡µä¸¤æ¡çºªå½•
+this.cntPS   = cntPS || 3;//é»˜è®¤æ¯é¡µæ˜¾ç¤º5ä¸ªåˆ†é¡µä¸Šä¸‹æ–‡
 this.items   = [];
-this.showPNP = true;/*ÏÔÊ¾ÉÏÏÂÒ³Á´½Ó*/
-this.showType = true;/*»¬¶¯·ÖÒ³*/
+this.showPNP = true;/*æ˜¾ç¤ºä¸Šä¸‹é¡µé“¾æ¥*/
+this.showType = true;/*æ»‘åŠ¨åˆ†é¡µ*/
 this.result   = {pagedata:[],pagebar:'',limit:[0,0],report:''};
-this.parse();/*×Ü¼ÍÂ¼Êı*/
+this.parse();/*æ€»è®°å½•æ•°*/
 }
 ETNGpager.prototype.page = function (){
-this.cntP = Math.ceil(this.cntR/this.cntPP);/*×ÜÒ³Êı*/
-this.cntS = Math.ceil(this.cntP/this.cntPS);/*×Ü¶ÎÊı*/
-this.curS = Math.ceil(this.curP/this.cntPS);/*µ±Ç°¶Î*/
-this.preP = this.curP -1;/*ÉÏÒ»Ò³*/
-this.nextP = this.curP +1;/*ÏÂÒ»Ò³*/
-this.preS = this.curS -1;/*ÉÏÒ»¶Î*/
-this.nextS = this.curS +1;/*ÏÂÒ»¶Î*/
-this.startR = (this.curP -1)*this.cntPP + 1;/*ÆğÊ¼¼ÍÂ¼*/
-this.endR = (this.curP*this.cntPP >this.cntR)?this.cntR:this.curP*this.cntPP;/*½áÊø¼ÍÂ¼*/
+this.cntP = Math.ceil(this.cntR/this.cntPP);/*æ€»é¡µæ•°*/
+this.cntS = Math.ceil(this.cntP/this.cntPS);/*æ€»æ®µæ•°*/
+this.curS = Math.ceil(this.curP/this.cntPS);/*å½“å‰æ®µ*/
+this.preP = this.curP -1;/*ä¸Šä¸€é¡µ*/
+this.nextP = this.curP +1;/*ä¸‹ä¸€é¡µ*/
+this.preS = this.curS -1;/*ä¸Šä¸€æ®µ*/
+this.nextS = this.curS +1;/*ä¸‹ä¸€æ®µ*/
+this.startR = (this.curP -1)*this.cntPP + 1;/*èµ·å§‹çºªå½•*/
+this.endR = (this.curP*this.cntPP >this.cntR)?this.cntR:this.curP*this.cntPP;/*ç»“æŸçºªå½•*/
 this.result['pagedata']=[];
 if(this.showType){
 this.perSide = Math.floor(this.cntPS/2);
@@ -36,8 +36,8 @@ for(var i = this.startP;i<=this.endP;i++){
 this.result['pagedata'].push((i==this.curP)?'<a  href="#" class="curPage">'+i+'</a>':'<a  href="#" onclick="page('+i+')">'+i+'</a>');
 }
 if(this.showPNP){
-if(this.curP>1)this.result['pagedata'].unshift('<a  href="#" onclick="page('+(this.curP-1)+')">ÉÏÒ»Ò³</a>');
-if(this.curP<this.cntP)this.result['pagedata'].push('<a  href="#" onclick="page('+(this.curP+1)+')">ÏÂÒ»Ò³</a>');
+if(this.curP>1)this.result['pagedata'].unshift('<a  href="#" onclick="page('+(this.curP-1)+')">ä¸Šä¸€é¡µ</a>');
+if(this.curP<this.cntP)this.result['pagedata'].push('<a  href="#" onclick="page('+(this.curP+1)+')">ä¸‹ä¸€é¡µ</a>');
 }
 this.result['pagebar'] = this.result['pagedata'].join('&nbsp;&nbsp;');
 this.result['limit'] = [this.startR,this.endR];
