@@ -8,8 +8,6 @@ redirect_from:
 ---
 I work with remote-sensing and geospatial data to understand vegetation phenology and how ecological patterns change across spatial scales. I am currently based in Hong Kong and study at the University of Hong Kong.
 
-[Explore my research Browse opportunities](/jobs/)
-
 ## Research interests
 
 01
