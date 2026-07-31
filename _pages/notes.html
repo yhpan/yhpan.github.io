@@ -1,0 +1,74 @@
+---
+title: "Notes"
+permalink: /notes/
+author_profile: true
+---
+
+{% include base_path %}
+{% assign notes = site.posts | sort: "date" | reverse %}
+{% assign note_tags = site.tags | sort %}
+
+<div class="notes-app" data-notes-app>
+  <p class="notes-intro">{{ site.data.page_text.notes_intro }}</p>
+
+  <nav class="notes-nav" aria-label="Notes views">
+    <a class="notes-nav__link notes-nav__link--active" href="{{ base_path }}/notes/">All Notes</a>
+    <a class="notes-nav__link" href="{{ base_path }}/notes/tags/">Tags</a>
+    <a class="notes-nav__link" href="{{ base_path }}/notes/archive/">Timeline</a>
+  </nav>
+
+  <div class="notes-toolbar" aria-label="Filter notes">
+    <div class="notes-field notes-field--search">
+      <label for="notes-search">Search notes</label>
+      <input id="notes-search" type="search" placeholder="Search title or summary" autocomplete="off" data-notes-search>
+    </div>
+    <div class="notes-field notes-field--year">
+      <label for="notes-year">Publication year</label>
+      <select id="notes-year" data-notes-year>
+        <option value="">All years</option>
+        {% assign current_year = "" %}
+        {% for note in notes %}
+          {% assign note_year = note.date | date: "%Y" %}
+          {% if note_year != current_year %}
+            <option value="{{ note_year }}">{{ note_year }}</option>
+            {% assign current_year = note_year %}
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  {% if note_tags.size > 0 %}
+    <div class="notes-tag-filter" aria-label="Filter by tag">
+      <button class="notes-tag is-active" type="button" data-notes-tag="">All tags</button>
+      {% for tag in note_tags %}
+        <button class="notes-tag" type="button" data-notes-tag="{{ tag[0] | downcase | escape }}">{{ tag[0] }} <span>{{ tag[1].size }}</span></button>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <p class="notes-summary" aria-live="polite" data-notes-summary></p>
+
+  <div class="notes-list">
+    {% for note in notes %}
+      <article class="note-card" data-note data-note-title="{{ note.title | downcase | escape }}" data-note-excerpt="{{ note.excerpt | strip_html | downcase | escape }}" data-note-tags="{{ note.tags | join: "|" | downcase | escape }}" data-note-year="{{ note.date | date: "%Y" }}">
+        <time class="note-card__date" datetime="{{ note.date | date_to_xmlschema }}">{{ note.date | date: "%B %-d, %Y" }}</time>
+        <h2 class="note-card__title"><a href="{{ note.url | relative_url }}">{{ note.title }}</a></h2>
+        {% if note.excerpt %}
+          <p class="note-card__excerpt">{{ note.excerpt | strip_html | truncate: 220 }}</p>
+        {% endif %}
+        {% if note.tags.size > 0 %}
+          <div class="note-card__tags" aria-label="Tags">
+            {% for tag in note.tags %}
+              <button type="button" data-note-card-tag="{{ tag | downcase | escape }}">#{{ tag }}</button>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
+
+  <p class="notes-empty" data-notes-empty hidden>No notes match these filters.</p>
+</div>
+
+<script src="{{ base_path }}/assets/js/notes.js" defer></script>

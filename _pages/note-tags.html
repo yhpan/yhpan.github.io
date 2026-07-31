@@ -1,0 +1,35 @@
+---
+title: "Notes by Tag"
+permalink: /notes/tags/
+author_profile: true
+---
+
+{% include base_path %}
+{% assign note_tags = site.tags | sort %}
+
+<nav class="notes-nav" aria-label="Notes views">
+  <a class="notes-nav__link" href="{{ base_path }}/notes/">All Notes</a>
+  <a class="notes-nav__link notes-nav__link--active" href="{{ base_path }}/notes/tags/">Tags</a>
+  <a class="notes-nav__link" href="{{ base_path }}/notes/archive/">Timeline</a>
+</nav>
+
+{% if note_tags.size == 0 %}
+  <p class="notice--info">No tags have been added yet.</p>
+{% else %}
+  <div class="notes-tag-index">
+    {% for tag in note_tags %}
+      <section class="notes-tag-group" id="{{ tag[0] | slugify }}">
+        <h2><a href="{{ base_path }}/notes/?tag={{ tag[0] | url_encode }}">#{{ tag[0] }}</a> <span>{{ tag[1].size }}</span></h2>
+        <ul>
+          {% assign tagged_notes = tag[1] | sort: "date" | reverse %}
+          {% for note in tagged_notes %}
+            <li>
+              <time datetime="{{ note.date | date_to_xmlschema }}">{{ note.date | date: "%Y-%m-%d" }}</time>
+              <a href="{{ note.url | relative_url }}">{{ note.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  </div>
+{% endif %}

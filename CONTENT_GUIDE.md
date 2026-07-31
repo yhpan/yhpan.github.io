@@ -1,40 +1,85 @@
 # 网站内容管理说明
 
-这个站点基于 Academic Pages，继续使用 GitHub Pages 免费托管。职位、论文和新笔记都以独立的 Markdown 文件保存，因此内容和页面样式彼此分离。
+本站使用 Academic Pages + GitHub Pages，托管和自动发布均免费。推荐用 Pages CMS 管理日常内容，用本地 Git 管理布局或批量修改。
 
-## 推荐：Pages CMS 可视化管理
+## Pages CMS：日常管理入口
 
-1. 打开 https://pagescms.org 并使用 GitHub 登录。
-2. 选择 `yhpan/yhpan.github.io` 仓库和默认分支。
-3. 进入 **Job opportunities**，即可用表单新增、编辑或删除职位。
-4. 保存后，Pages CMS 会直接提交到 GitHub；GitHub Pages 随后自动重新构建网站。
+1. 打开 <https://pagescms.org>，使用 GitHub 登录。
+2. 选择 `yhpan/yhpan.github.io` 仓库及 `main` 分支。
+3. 在左侧选择要编辑的内容，保存后 Pages CMS 会直接生成 Git 提交。
+4. GitHub Actions 会自动构建并发布，一般无需手动部署。
 
-职位状态不需要手动维护：
+Pages CMS 当前可以管理：
+
+- **Author profile**：侧边栏头像、姓名、简介、单位、地点、邮箱和学术/社交链接
+- **Site settings**：站点标题、简介、网址和语言
+- **Main navigation**：顶部菜单文字、顺序和链接
+- **Page introductions**：Notes 与 Jobs 页面的介绍文字
+- **Homepage / Research page / Projects page**：主要页面正文
+- **Publications**：新增、编辑和删除论文记录
+- **New research notes**：新增、编辑和删除 Notes，并设置日期、摘要和多个 Tags
+- **Job opportunities**：新增、编辑和删除工作机会
+
+页面布局、筛选程序和主题样式仍由本地 Git 管理，以免内容编辑时意外破坏网站结构。
+
+## Author Profile 在哪里修改
+
+在 Pages CMS 左侧打开 **Author profile** 即可。对应的本地文件为 `_data/profile.yml`。修改并保存后，网站所有页面侧边栏、页脚 GitHub 链接和 Publications 页的 Google Scholar 链接会同步读取这里的数据。
+
+头像可以填写公开图片网址，或填写网站内图片路径，例如 `/images/profile.jpg`。
+
+## Notes 管理
+
+每篇 Note 是 `_posts/` 中一个 Markdown 文件。在 Pages CMS 的 **New research notes** 中填写：
+
+- `title`：标题
+- `date`：发布日期
+- `excerpt`：列表中的简短摘要
+- `tags`：可添加多个标签
+- `published`：是否公开
+- `body`：正文
+
+网站提供三种浏览方式：
+
+- `/notes/`：按关键词、Tags 和年份筛选
+- `/notes/tags/`：按 Tags 聚合
+- `/notes/archive/`：按日期归档
+
+旧 Hexo Notes 已迁移为统一的 Academic Pages 文章，同时保留原网址。
+
+## Jobs 管理
+
+在 Pages CMS 的 **Job opportunities** 中维护标题、职位类别、地点、机构、截止日期、申请链接和来源链接。网站只显示列表视图，并提供搜索、职位类型和状态筛选。
+
+状态会在浏览器中自动计算：
 
 - 有截止日期且尚未到期：Active
 - 未填写截止日期：No Deadline
 - 已过截止日期：Expired
 
-## 本地 Git 管理
+## 本地 Git 发布
 
-职位文件位于 `_jobs/`。复制任意现有文件，修改标题、职位类型、地点、机构、截止日期和链接即可。日期采用 `YYYY-MM-DD` 格式；没有固定截止日期时留空。
+在 `D:\Git\yhpan.github.io\yhpan.github.io-main` 修改完成后：
 
-其他主要内容：
+```powershell
+git status
+git add -A
+git commit -m "Update website content"
+git push origin main
+```
 
-- 首页：`_pages/about.md`
-- 研究页：`_pages/research.md`
-- 项目页：`_pages/projects.md`
-- 论文：`_publications/`
-- 新研究笔记：`_posts/`
-- 顶部导航：`_data/navigation.yml`
-- 姓名、头像和社交链接：`_config.yml`
-
-修改后提交并推送到 GitHub。仓库的 GitHub Pages 发布来源需在 **Settings → Pages → Build and deployment** 中选择 **GitHub Actions**。
+GitHub 仓库的 **Settings → Pages → Build and deployment** 应选择 **GitHub Actions**。
 
 ## 本地预览
 
-如果电脑已安装 Docker，可在站点目录中使用 Docker Compose 启动预览；页面默认在 `http://localhost:4000` 打开。
+如果已安装并启动 Docker Desktop：
 
-## 旧站内容
+```powershell
+docker compose up
+```
 
-原 Hexo 文章和所需静态资源保留在原路径，因此旧链接仍可继续访问。迁移前的完整静态站另有一份同级备份目录 `yhpan.github.io-legacy-backup`。
+浏览器打开 `http://localhost:4000`。停止预览可按 `Ctrl+C`。
+
+## 备份
+
+迁移前的完整旧站保存在同级目录 `D:\Git\yhpan.github.io\yhpan.github.io-legacy-backup`。仓库中的旧 Hexo 静态副本已移除，减少重复文件；原 Notes URL 已由新文章继续承接。

@@ -13,6 +13,125 @@ settings:
       delete: "content: remove {name}"
 
 content:
+  - name: profile
+    label: Author profile
+    type: file
+    path: _data/profile.yml
+    format: yaml
+    operations:
+      delete: false
+    fields:
+      - name: avatar
+        label: Profile photo
+        type: image
+      - name: name
+        label: Display name
+        type: string
+        required: true
+      - name: pronouns
+        label: Pronouns
+        type: string
+      - name: bio
+        label: Short bio
+        type: text
+      - name: location
+        type: string
+      - name: employer
+        type: string
+      - name: uri
+        label: Personal website
+        type: string
+      - name: email
+        type: string
+      - name: googlescholar
+        label: Google Scholar URL
+        type: string
+      - name: orcid
+        label: ORCID URL
+        type: string
+      - name: researchgate
+        label: ResearchGate URL
+        type: string
+      - name: semantic
+        label: Semantic Scholar URL
+        type: string
+      - name: github
+        label: GitHub username
+        type: string
+      - name: linkedin
+        label: LinkedIn username
+        type: string
+      - name: twitter
+        label: X / Twitter username
+        type: string
+      - name: zhihu
+        label: Zhihu username
+        type: string
+
+  - name: site-settings
+    label: Site settings
+    type: file
+    path: _config.yml
+    format: yaml
+    operations:
+      delete: false
+    fields:
+      - name: title
+        label: Browser title
+        type: string
+        required: true
+      - name: name
+        label: Site name
+        type: string
+        required: true
+      - name: description
+        label: Search description
+        type: text
+      - name: url
+        label: Website URL
+        type: string
+        required: true
+      - name: locale
+        label: Language locale
+        type: string
+
+  - name: navigation
+    label: Main navigation
+    type: file
+    path: _data/navigation.yml
+    format: yaml
+    operations:
+      delete: false
+    fields:
+      - name: main
+        label: Menu links
+        type: object
+        list: true
+        fields:
+          - name: title
+            label: Link label
+            type: string
+            required: true
+          - name: url
+            label: URL
+            type: string
+            required: true
+
+  - name: page-introductions
+    label: Page introductions
+    type: file
+    path: _data/page_text.yml
+    format: yaml
+    operations:
+      delete: false
+    fields:
+      - name: notes_intro
+        label: Notes introduction
+        type: text
+      - name: jobs_intro
+        label: Jobs introduction
+        type: text
+
   - name: jobs
     label: Job opportunities
     type: collection
@@ -78,6 +197,36 @@ content:
         label: Homepage content
         type: rich-text
 
+  - name: research-page
+    label: Research page
+    type: file
+    path: _pages/research.md
+    format: yaml-frontmatter
+    operations:
+      delete: false
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: body
+        label: Research content
+        type: rich-text
+
+  - name: projects-page
+    label: Projects page
+    type: file
+    path: _pages/projects.md
+    format: yaml-frontmatter
+    operations:
+      delete: false
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: body
+        label: Projects content
+        type: rich-text
+
   - name: publications
     label: Publications
     type: collection
@@ -128,13 +277,15 @@ content:
     type: collection
     path: _posts
     format: yaml-frontmatter
-    filename: "{year}-{month}-{day}-{primary}.md"
+    filename:
+      template: "{date}-{primary}.md"
+      field: create
     exclude: [".gitkeep"]
     view:
       primary: title
-      fields: [title, date]
+      fields: [title, date, tags]
       sort: [date, title]
-      search: [title, body]
+      search: [title, tags, body]
       default:
         sort: date
         order: desc
@@ -147,5 +298,14 @@ content:
         required: true
       - name: excerpt
         type: text
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+        description: Add one or more tags for browsing and aggregation.
+      - name: published
+        label: Published
+        type: boolean
+        default: true
       - name: body
         type: rich-text

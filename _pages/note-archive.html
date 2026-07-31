@@ -1,0 +1,40 @@
+---
+title: "Notes Timeline"
+permalink: /notes/archive/
+author_profile: true
+---
+
+{% include base_path %}
+{% assign notes = site.posts | sort: "date" | reverse %}
+
+<nav class="notes-nav" aria-label="Notes views">
+  <a class="notes-nav__link" href="{{ base_path }}/notes/">All Notes</a>
+  <a class="notes-nav__link" href="{{ base_path }}/notes/tags/">Tags</a>
+  <a class="notes-nav__link notes-nav__link--active" href="{{ base_path }}/notes/archive/">Timeline</a>
+</nav>
+
+{% if notes.size == 0 %}
+  <p class="notice--info">No notes have been published yet.</p>
+{% else %}
+  <div class="notes-timeline">
+    {% assign current_year = "" %}
+    {% for note in notes %}
+      {% assign note_year = note.date | date: "%Y" %}
+      {% if note_year != current_year %}
+        {% unless forloop.first %}</ul></section>{% endunless %}
+        <section class="notes-year" id="year-{{ note_year }}">
+          <h2>{{ note_year }}</h2>
+          <ul>
+        {% assign current_year = note_year %}
+      {% endif %}
+      <li>
+        <time datetime="{{ note.date | date_to_xmlschema }}">{{ note.date | date: "%b %-d" }}</time>
+        <a href="{{ note.url | relative_url }}">{{ note.title }}</a>
+        {% if note.tags.size > 0 %}
+          <span class="notes-year__tags">{{ note.tags | join: " · " }}</span>
+        {% endif %}
+      </li>
+      {% if forloop.last %}</ul></section>{% endif %}
+    {% endfor %}
+  </div>
+{% endif %}
