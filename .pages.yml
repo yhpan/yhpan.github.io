@@ -1,0 +1,151 @@
+media:
+  input: images
+  output: /images
+
+settings:
+  content:
+    merge: true
+  commit:
+    identity: user
+    templates:
+      create: "content: add {name}"
+      update: "content: update {name}"
+      delete: "content: remove {name}"
+
+content:
+  - name: jobs
+    label: Job opportunities
+    type: collection
+    path: _jobs
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    exclude: [".gitkeep"]
+    view:
+      primary: title
+      fields: [title, position, institution, location, deadline]
+      sort: [deadline, title, position]
+      search: [title, institution, location]
+      default:
+        sort: deadline
+        order: asc
+    fields:
+      - name: title
+        label: Job title
+        type: string
+        required: true
+      - name: position
+        label: Position type
+        type: select
+        required: true
+        options:
+          values: [Postdoc, PhD, Faculty, Engineer, Internship, Other]
+      - name: location
+        label: Job location
+        type: string
+      - name: institution
+        label: Institution
+        type: string
+      - name: deadline
+        label: Deadline
+        type: date
+        description: Leave empty when there is no fixed deadline.
+      - name: apply_url
+        label: Application link
+        type: string
+      - name: source_url
+        label: Source link
+        type: string
+      - name: featured
+        label: Featured
+        type: boolean
+      - name: body
+        label: Notes
+        type: rich-text
+
+  - name: homepage
+    label: Homepage
+    type: file
+    path: _pages/about.md
+    format: yaml-frontmatter
+    operations:
+      delete: false
+    fields:
+      - name: title
+        label: Page title
+        type: string
+        required: true
+      - name: body
+        label: Homepage content
+        type: rich-text
+
+  - name: publications
+    label: Publications
+    type: collection
+    path: _publications
+    format: yaml-frontmatter
+    filename: "{year}-{month}-{day}-{primary}.md"
+    exclude: [".gitkeep"]
+    view:
+      primary: title
+      fields: [title, category, date, venue]
+      sort: [date, title]
+      search: [title, venue, citation]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: category
+        type: select
+        required: true
+        options:
+          values:
+            - name: manuscripts
+              label: Journal Article
+            - name: conferences
+              label: Conference Paper
+            - name: software
+              label: Research Software
+      - name: date
+        type: date
+      - name: venue
+        type: string
+      - name: excerpt
+        type: text
+      - name: paperurl
+        label: Paper URL
+        type: string
+      - name: citation
+        type: text
+      - name: body
+        label: Abstract or notes
+        type: rich-text
+
+  - name: notes
+    label: New research notes
+    type: collection
+    path: _posts
+    format: yaml-frontmatter
+    filename: "{year}-{month}-{day}-{primary}.md"
+    exclude: [".gitkeep"]
+    view:
+      primary: title
+      fields: [title, date]
+      sort: [date, title]
+      search: [title, body]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: date
+        type: date
+        required: true
+      - name: excerpt
+        type: text
+      - name: body
+        type: rich-text

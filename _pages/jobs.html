@@ -1,0 +1,171 @@
+---
+title: "Jobs Opportunities"
+permalink: /jobs/
+author_profile: true
+---
+
+{% include base_path %}
+
+<div class="jobs-app" data-jobs-app>
+  <p class="jobs-intro">A curated collection of research and technical opportunities. Deadlines are evaluated automatically in your browser, so positions move from Active to Expired without manual status updates.</p>
+
+  <div class="jobs-tabs" role="tablist" aria-label="Opportunity views">
+    <button class="jobs-tab" type="button" role="tab" aria-selected="true" aria-controls="jobs-board" data-jobs-view="board">
+      <i class="fas fa-columns" aria-hidden="true"></i> Board
+    </button>
+    <button class="jobs-tab" type="button" role="tab" aria-selected="false" aria-controls="jobs-list" data-jobs-view="list">
+      <i class="fas fa-table" aria-hidden="true"></i> All Positions
+    </button>
+  </div>
+
+  <div class="jobs-toolbar" aria-label="Filter opportunities">
+    <div class="jobs-field">
+      <label for="jobs-search">Search opportunities</label>
+      <input id="jobs-search" type="search" placeholder="Search title, institution, or location" autocomplete="off" data-jobs-search>
+    </div>
+    <div class="jobs-field">
+      <label for="jobs-position">Filter by position</label>
+      <select id="jobs-position" data-jobs-position>
+        <option value="">All position types</option>
+        <option value="Postdoc">Postdoc</option>
+        <option value="PhD">PhD</option>
+        <option value="Faculty">Faculty</option>
+        <option value="Engineer">Engineer</option>
+        <option value="Internship">Internship</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="jobs-field">
+      <label for="jobs-status">Filter by status</label>
+      <select id="jobs-status" data-jobs-status>
+        <option value="">All statuses</option>
+        <option value="active">Active</option>
+        <option value="no-deadline">No deadline</option>
+        <option value="expired">Expired</option>
+      </select>
+    </div>
+  </div>
+
+  <p class="jobs-summary" aria-live="polite" data-jobs-summary></p>
+
+  <section id="jobs-board" role="tabpanel" data-jobs-panel="board" hidden>
+    <div class="jobs-board">
+      <section class="jobs-column" aria-labelledby="jobs-active-heading">
+        <h2 class="jobs-column__heading" id="jobs-active-heading">
+          <span class="jobs-dot jobs-dot--active" aria-hidden="true"></span>
+          Active <span class="jobs-count" data-jobs-count="active">0</span>
+        </h2>
+        <div class="jobs-column__items" data-jobs-column="active"></div>
+        <p class="jobs-empty" data-jobs-column-empty="active" hidden>No active opportunities match these filters.</p>
+      </section>
+
+      <section class="jobs-column" aria-labelledby="jobs-no-deadline-heading">
+        <h2 class="jobs-column__heading" id="jobs-no-deadline-heading">
+          <span class="jobs-dot jobs-dot--no-deadline" aria-hidden="true"></span>
+          No Deadline <span class="jobs-count" data-jobs-count="no-deadline">0</span>
+        </h2>
+        <div class="jobs-column__items" data-jobs-column="no-deadline"></div>
+        <p class="jobs-empty" data-jobs-column-empty="no-deadline" hidden>No open-ended opportunities match these filters.</p>
+      </section>
+
+      <section class="jobs-column" aria-labelledby="jobs-expired-heading">
+        <h2 class="jobs-column__heading" id="jobs-expired-heading">
+          <span class="jobs-dot jobs-dot--expired" aria-hidden="true"></span>
+          Expired <span class="jobs-count" data-jobs-count="expired">0</span>
+        </h2>
+        <div class="jobs-column__items" data-jobs-column="expired"></div>
+        <p class="jobs-empty" data-jobs-column-empty="expired" hidden>No expired opportunities match these filters.</p>
+      </section>
+    </div>
+  </section>
+
+  <section id="jobs-list" role="tabpanel" data-jobs-panel="list">
+    <div class="jobs-table-wrap">
+      <table class="jobs-table">
+        <thead>
+          <tr>
+            <th scope="col">Job Title</th>
+            <th scope="col">Status</th>
+            <th scope="col">Position</th>
+            <th scope="col">Job Location</th>
+            <th scope="col">Institution</th>
+            <th scope="col">Deadline</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in site.jobs %}
+            {% assign deadline = "" %}
+            {% if job.deadline %}
+              {% assign deadline = job.deadline | date: "%Y-%m-%d" %}
+            {% endif %}
+            {% assign position_class = "other" %}
+            {% if job.position == "Postdoc" %}
+              {% assign position_class = "postdoc" %}
+            {% elsif job.position == "PhD" %}
+              {% assign position_class = "phd" %}
+            {% elsif job.position == "Faculty" %}
+              {% assign position_class = "faculty" %}
+            {% elsif job.position == "Engineer" %}
+              {% assign position_class = "engineer" %}
+            {% elsif job.position == "Internship" %}
+              {% assign position_class = "internship" %}
+            {% endif %}
+            <tr class="jobs-row" data-job data-job-key="{{ job.path | slugify }}" data-title="{{ job.title | escape }}" data-position="{{ job.position | escape }}" data-location="{{ job.location | escape }}" data-institution="{{ job.institution | escape }}" data-deadline="{{ deadline }}">
+              <td>
+                {% if job.apply_url %}
+                  <a href="{{ job.apply_url }}" target="_blank" rel="noopener">{{ job.title }}</a>
+                {% else %}
+                  <strong>{{ job.title }}</strong>
+                {% endif %}
+              </td>
+              <td><span class="job-status" data-job-status-label>Checking</span></td>
+              <td><span class="job-pill job-pill--{{ position_class }}">{{ job.position | default: "Other" }}</span></td>
+              <td>{{ job.location | default: "—" }}</td>
+              <td>{{ job.institution | default: "—" }}</td>
+              <td>{% if deadline != "" %}<time datetime="{{ deadline }}">{{ deadline | date: "%Y/%m/%d" }}</time>{% else %}No deadline{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="jobs-empty" data-jobs-empty hidden>No opportunities match these filters.</p>
+  </section>
+
+  <div data-jobs-card-source hidden>
+    {% for job in site.jobs %}
+      {% assign deadline = "" %}
+      {% if job.deadline %}
+        {% assign deadline = job.deadline | date: "%Y-%m-%d" %}
+      {% endif %}
+      {% assign position_class = "other" %}
+      {% if job.position == "Postdoc" %}
+        {% assign position_class = "postdoc" %}
+      {% elsif job.position == "PhD" %}
+        {% assign position_class = "phd" %}
+      {% elsif job.position == "Faculty" %}
+        {% assign position_class = "faculty" %}
+      {% elsif job.position == "Engineer" %}
+        {% assign position_class = "engineer" %}
+      {% elsif job.position == "Internship" %}
+        {% assign position_class = "internship" %}
+      {% endif %}
+      <article class="jobs-card" data-job data-job-key="{{ job.path | slugify }}" data-title="{{ job.title | escape }}" data-position="{{ job.position | escape }}" data-location="{{ job.location | escape }}" data-institution="{{ job.institution | escape }}" data-deadline="{{ deadline }}">
+        <h3 class="jobs-card__title">
+          {% if job.apply_url %}
+            <a href="{{ job.apply_url }}" target="_blank" rel="noopener">🌍 {{ job.title }}</a>
+          {% else %}
+            <span>🌍 {{ job.title }}</span>
+          {% endif %}
+        </h3>
+        <p class="jobs-card__institution">{{ job.institution }}{% if job.location %} · {{ job.location }}{% endif %}</p>
+        <div class="jobs-card__meta">
+          <span class="job-status" data-job-status-label>Checking</span>
+          <span class="job-pill job-pill--{{ position_class }}">{{ job.position | default: "Other" }}</span>
+          <span>{% if deadline != "" %}<time datetime="{{ deadline }}">{{ deadline | date: "%Y/%m/%d" }}</time>{% else %}No deadline{% endif %}</span>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</div>
+
+<script src="{{ base_path }}/assets/js/jobs.js" defer></script>
