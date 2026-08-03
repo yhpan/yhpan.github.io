@@ -9,7 +9,7 @@ published: true
 ---
 
 ## 目录
-[[toc]]
+<!-- toc -->
 
 ## Coordination hypothesis of leaf photosynthesis
 
