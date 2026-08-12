@@ -10,19 +10,16 @@ I work with remote-sensing and geospatial data to understand vegetation phenolog
 
 ## Research interests
 
-01
 
 ### Vegetation phenology
 
 Retrieving seasonal vegetation dynamics from Earth-observation data and evaluating the ecological meaning of phenology metrics.
 
-02
 
 ### Remote sensing
 
 Building reproducible workflows for geospatial data processing, environmental monitoring, and model-ready data products.
 
-03
 
 ### Scale effects
 
